@@ -4,6 +4,8 @@ const router = express.Router()
 const { ensureAuth, ensureGuest } = require('../middleware/auth');
 // we are reusing ensureAuth and ensureGuest from the middleware folder so that people who are not logged in will get kicked out
 
+const Story = require('../models/Story');
+
 // @desc Login/Landing page
 // @Route GET /
 router.get('/', ensureGuest, (req, res) => {
@@ -15,8 +17,17 @@ router.get('/', ensureGuest, (req, res) => {
 
 // @desc Dashboard 
 // @Route GET /dashboard
-router.get('/dashboard', ensureAuth, (req, res) => {
-    res.render('Dashboard');
+router.get('/dashboard', ensureAuth, async (req, res) => {
+    try {
+        const stories = await Story.find({ user: req.user.id }).lean() // lean is a mongoose method that returns a plain javascript object
+        res.render('Dashboard', {
+            name: req.user.firstName,
+            stories
+        })
+    } catch (err) {
+        console.error(err)
+        res.render('error/500')
+    }
 })
 
 module.exports = router

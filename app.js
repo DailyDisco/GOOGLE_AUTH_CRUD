@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const morgan = require('morgan'); // morgan is a middleware that logs requests to the console
 const exphbs = require('express-handlebars'); // express-handlebars is a middleware that allows us to use handlebars
 const session = require('express-session');
+const MongoStore = require('connect-mongo'); 
 const connectDB = require('./config/db');
 
 // Load config
@@ -42,6 +43,9 @@ app.use(
       secret: 'keyboard cat',
       resave: false,
       saveUninitialized: false,
+      store: MongoStore.create({
+        mongoUrl: process.env.MONGO_URI
+      })
 }))
 
 // Passport middleware
@@ -56,7 +60,7 @@ app.use(express.static(path.join(__dirname, 'public'))) // this is the default f
 app.use('/', require('./routes/index'));
 app.use('/auth', require('./routes/auth'));
 // we are sending the routes to the auth folder which has the routes for authentication
-
+app.use('/stories', require('./routes/stories'));
 // app.use('/dashboard', require('./routes/index'));
 
 const PORT = process.env.PORT || 8500;
