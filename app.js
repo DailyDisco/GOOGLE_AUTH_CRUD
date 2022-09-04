@@ -19,19 +19,27 @@ connectDB();
 
 const app = express();
 
+// Body parser
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
 // Logging
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
 // Handlebars
+const { formatDate, stripTags, truncate, editIcon, select } = require('./helpers/hbs');
 // Add the word .engine after exphbs
 // this tells express to use handlebars as the templating engine
 // handlebars is a templating engine that allows us to use handlebars which is a templating language for the web that allows us to write html in javascript
 app.engine(
   '.hbs',
   exphbs.engine({
-    extname: '.hbs',
+    helpers: {
+      formatDate,
+    },
+    defaultLayout: 'main',
     extname: '.hbs',
   })
 );
