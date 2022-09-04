@@ -38,6 +38,8 @@ app.engine(
   exphbs.engine({
     helpers: {
       formatDate,
+      stripTags,
+      truncate
     },
     defaultLayout: 'main',
     extname: '.hbs',
