@@ -31,6 +31,7 @@ module.exports = {
           return ''
         }
     },
+    // this replaces the selected option with the on that is passed in, or the default value
       select: function (selected, options) {
         return options
           .fn(this)

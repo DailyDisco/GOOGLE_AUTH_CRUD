@@ -4,6 +4,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan'); // morgan is a middleware that logs requests to the console
 const exphbs = require('express-handlebars'); // express-handlebars is a middleware that allows us to use handlebars
+const methodOverride = require('method-override'); // method-override is a middleware that allows us to use PUT and DELETE requests
 const session = require('express-session');
 const MongoStore = require('connect-mongo'); 
 const connectDB = require('./config/db');
@@ -22,6 +23,18 @@ const app = express();
 // Body parser
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+
+// Method override
+// This allows us to swap POST and GET requests with PUT and DELETE requests
+app.use(methodOverride(function(req, res){
+  // check if the body exists, if the body exists, check if the _method exists, check if the override exists
+    if (req.body && typeof req.body === 'object' && '_method' in req.body) {
+        // look in urlencoded POST bodies and delete it
+        let method = req.body._method
+        delete req.body._method
+        return method
+    }
+})); // this is a function that allows us to use PUT and DELETE requests
 
 // Logging
 if (process.env.NODE_ENV === 'development') {
