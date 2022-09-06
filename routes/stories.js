@@ -44,4 +44,11 @@ router.get('/', ensureAuth, async (req, res) => {
     }
 })
 
+// @desc Show edit page
+// @Route GET /stories/edit/:id
+router.get('/edit/:id', ensureAuth, (req, res) => {
+    // instead of just sending text we want to render a page
+    res.render('stories/add')
+})
+
 module.exports = router

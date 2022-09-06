@@ -39,7 +39,9 @@ app.engine(
     helpers: {
       formatDate,
       stripTags,
-      truncate
+      truncate,
+      editIcon,
+      select
     },
     defaultLayout: 'main',
     extname: '.hbs',
@@ -58,9 +60,17 @@ app.use(
       })
 }))
 
+
 // Passport middleware
 app.use(passport.initialize()); // this middleware initializes passport
 app.use(passport.session()); // this middleware initializes passport
+
+// Set Global Variable
+// We are calling next so that it moves on to the next piece of middleware
+app.use(function (req, res, next) {
+  res.locals.user = req.user || null
+  next()
+})
 
 // Static Folder
 app.use(express.static(path.join(__dirname, 'public'))) // this is the default folder for static files

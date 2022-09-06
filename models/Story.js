@@ -19,6 +19,8 @@ const StorySchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId, // this is the id of the user from the mongoose schema
         ref: 'User', // this is the name of the model that we are referencing
+        required: true,
+        // adding required so that the app will fail at the story post, rather than later on
     },
     createdAt: { // each time a user creates a new blog, this field will be updated
         type: Date,
